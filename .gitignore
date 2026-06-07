@@ -1,0 +1,40 @@
+
+.vs/
+
+TestHarness/bin/
+
+TestHarness/obj/
+
+TestHarnessDraw/bin/
+
+TestHarnessDraw/obj/
+
+Training Characters/
+
+GenImages/bin/
+
+GenImages/obj/
+
+OCR/bin/
+
+OCR/obj/
+
+TestHarness.Draw/bin/
+
+TestHarness.Draw/obj/
+
+TestHarness.Library/bin/
+
+TestHarness.Library/obj/
+
+TestHarness.Train/bin/
+
+TestHarness.Train/obj/
+
+TestHarness.Validate/bin/
+
+TestHarness.Validate/obj/
+
+Sample Images/
+
+Trained Models/

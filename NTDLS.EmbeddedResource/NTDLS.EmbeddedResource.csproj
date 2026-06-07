@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0;</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>NTDLS.EmbeddedResource</Title>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Copyright>Copyright © 2026 NetworkDLS</Copyright>
+    <Description>Simple utility to read and manage embedded resources (text files, images, etc.) in .NET applications.</Description>
+    <PackageProjectUrl>https://github.com/NTDLS/NTDLS.EmbeddedResource</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/NTDLS/NTDLS.EmbeddedResource</RepositoryUrl>
+    <PackageTags>embedded-resource;resource-management;caching</PackageTags>
+    <PackageReleaseNotes>
+      Initial release.
+    </PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>NetworkDLS</Authors>
+    <Company>NetworkDLS</Company>
+    <version>1.0.0</version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>Logo.png</PackageIcon>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Images\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>
