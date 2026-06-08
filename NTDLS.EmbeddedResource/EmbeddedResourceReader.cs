@@ -7,7 +7,7 @@ namespace NTDLS.EmbeddedResource
     /// <summary>
     /// Used to read EmbeddedResources from assemblies.
     /// </summary>
-    public static class EmbeddedResource
+    public static class EmbeddedResourceReader
     {
         private static readonly MemoryCache _cache = new(new MemoryCacheOptions());
 

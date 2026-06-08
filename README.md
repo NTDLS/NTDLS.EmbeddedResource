@@ -7,7 +7,7 @@
 Make sure the file in the project is marked as "Embedded Resource" in its properties.
 
 ```csharp
-var formattedText = EmbeddedResource.Format(@"TextFiles\TestResource.txt", ["World"]);
+var formattedText = EmbeddedResourceReader.Format(@"TextFiles\TestResource.txt", ["World"]);
 
 Console.WriteLine(formattedText);
 ```

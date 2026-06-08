@@ -6,7 +6,7 @@ namespace TestHarness
     {
         static void Main()
         {
-            var formattedText = EmbeddedResource.Format(@"TextFiles\TestResource.txt", ["World"]);
+            var formattedText = EmbeddedResourceReader.Format(@"TextFiles\TestResource.txt", ["World"]);
 
             Console.WriteLine(formattedText);
         }
