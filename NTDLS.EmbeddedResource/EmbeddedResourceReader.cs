@@ -20,7 +20,12 @@ namespace NTDLS.EmbeddedResource
         /// <param name="text">The text from which to remove the BOM.</param>
         /// <returns>The text without the BOM if it was present; otherwise, the original text.</returns>
         private static string StripBom(string text)
-            => text.StartsWith(_bom) ? text[_bom.Length..] : text;
+        {
+            // U+FEFF is the BOM character; only strip if it's literally that codepoint
+            if (text.Length > 0 && text[0] == '\uFEFF')
+                return text[1..];
+            return text;
+        }
 
         /// <summary>
         /// Loads the text content of an embedded resource from the specified resource path.
