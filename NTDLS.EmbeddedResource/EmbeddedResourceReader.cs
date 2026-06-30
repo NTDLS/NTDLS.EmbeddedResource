@@ -10,6 +10,17 @@ namespace NTDLS.EmbeddedResource
     public static class EmbeddedResourceReader
     {
         private static readonly MemoryCache _cache = new(new MemoryCacheOptions());
+        private static readonly string _bom = "\uFEFF";
+
+        /// <summary>
+        /// Strips the Byte Order Mark (BOM) from the beginning of a string if it exists.
+        /// This is useful for ensuring that text loaded from embedded resources does not contain unexpected BOM characters,
+        /// which can cause issues when we assume the text is in a specific encoding (like UTF-8) without BOM.
+        /// </summary>
+        /// <param name="text">The text from which to remove the BOM.</param>
+        /// <returns>The text without the BOM if it was present; otherwise, the original text.</returns>
+        private static string StripBom(string text)
+            => text.StartsWith(_bom) ? text[_bom.Length..] : text;
 
         /// <summary>
         /// Loads the text content of an embedded resource from the specified resource path.
@@ -24,7 +35,12 @@ namespace NTDLS.EmbeddedResource
         public static string LoadText(string resourcePath, Encoding? encoding = null)
         {
             var bytes = LoadBytes(resourcePath);
-            return (encoding ?? Encoding.UTF8).GetString(bytes);
+            var text = (encoding ?? Encoding.UTF8).GetString(bytes);
+            if(encoding == null)
+            {
+                text = StripBom(text);
+            }
+            return text;
         }
 
         /// <summary>
@@ -42,6 +58,11 @@ namespace NTDLS.EmbeddedResource
         {
             var bytes = LoadBytes(resourcePath);
             var text = (encoding ?? Encoding.UTF8).GetString(bytes);
+            if(encoding == null)
+            {
+                text = StripBom(text);
+            }
+
             return string.Format(text, param);
         }
 
