@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="TextFiles\TestResource2.txt" />
     <EmbeddedResource Include="TextFiles\TestResource.txt" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NTDLS.EmbeddedResource
 {
@@ -10,7 +11,6 @@ namespace NTDLS.EmbeddedResource
     public static class EmbeddedResourceReader
     {
         private static readonly MemoryCache _cache = new(new MemoryCacheOptions());
-        private static readonly string _bom = "\uFEFF";
 
         /// <summary>
         /// Strips the Byte Order Mark (BOM) from the beginning of a string if it exists.
@@ -101,6 +101,85 @@ namespace NTDLS.EmbeddedResource
             }
 
             throw new Exception($"The embedded resource could not be found after enumeration: '{resourcePath}'");
+        }
+
+        /// <summary>
+        /// Enumerates the names of embedded resources located under the specified "directory" (a namespace/folder
+        /// prefix, e.g. "TextFiles" or "TextFiles/SubFolder") whose file name matches the given wildcard pattern.
+        /// </summary>
+        /// <remarks>The method searches all loaded assemblies. Directory matching is case-insensitive and matches
+        /// on the trailing segment(s) of the resource's namespace, so a partial (suffix) directory path is
+        /// sufficient. The returned names are slash-separated paths that can be passed directly to <see
+        /// cref="LoadBytes"/>, <see cref="LoadText"/>, or <see cref="Format"/>.</remarks>
+        /// <param name="directoryPath">The "directory" (namespace prefix) to enumerate resources from, e.g. "TextFiles". Pass an empty string to
+        /// match resources with no folder prefix.</param>
+        /// <param name="searchPattern">A wildcard search pattern (supporting '*' and '?') to match against the resource file name. Defaults to "*"
+        /// which matches all files.</param>
+        /// <returns>A collection of matching resource paths, in slash-separated form.</returns>
+        public static IEnumerable<string> EnumerateResourceNames(string directoryPath, string searchPattern = "*")
+        {
+            static string NormalizeDirectory(string path)
+                => path.Replace('\\', '/').Trim('/').ToLowerInvariant();
+
+            var normalizedDirectory = NormalizeDirectory(directoryPath);
+            var regexPattern = "^" + Regex.Escape(searchPattern).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+            var fileNameRegex = new Regex(regexPattern, RegexOptions.IgnoreCase);
+
+            var results = new List<string>();
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                string[] resourceNames;
+                try
+                {
+                    resourceNames = assembly.GetManifestResourceNames();
+                }
+                catch (NotSupportedException)
+                {
+                    continue;
+                }
+
+                foreach (var rawResourceName in resourceNames)
+                {
+                    var friendlyPath = ConvertResourceNameToPath(rawResourceName);
+                    var lastSlashIndex = friendlyPath.LastIndexOf('/');
+                    var directoryPart = lastSlashIndex >= 0 ? friendlyPath[..lastSlashIndex] : string.Empty;
+                    var fileNamePart = lastSlashIndex >= 0 ? friendlyPath[(lastSlashIndex + 1)..] : friendlyPath;
+
+                    var normalizedDirectoryPart = NormalizeDirectory(directoryPart);
+
+                    var directoryMatches = normalizedDirectory.Length == 0
+                        ? normalizedDirectoryPart.Length == 0
+                        : normalizedDirectoryPart.Equals(normalizedDirectory, StringComparison.InvariantCultureIgnoreCase)
+                            || normalizedDirectoryPart.EndsWith('/' + normalizedDirectory, StringComparison.InvariantCultureIgnoreCase);
+
+                    if (directoryMatches && fileNameRegex.IsMatch(fileNamePart))
+                    {
+                        results.Add(friendlyPath);
+                    }
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Converts a dotted embedded resource name (e.g. "MyProject.TextFiles.TestResource.txt") into a
+        /// slash-separated friendly path (e.g. "MyProject/TextFiles/TestResource.txt"), treating the final
+        /// dot-delimited segment as the file extension.
+        /// </summary>
+        private static string ConvertResourceNameToPath(string resourceName)
+        {
+            var lastDotIndex = resourceName.LastIndexOf('.');
+            if (lastDotIndex < 0)
+            {
+                return resourceName;
+            }
+
+            var namePart = resourceName[..lastDotIndex].Replace('.', '/');
+            var extensionPart = resourceName[(lastDotIndex + 1)..];
+
+            return $"{namePart}.{extensionPart}";
         }
 
         /// <summary>

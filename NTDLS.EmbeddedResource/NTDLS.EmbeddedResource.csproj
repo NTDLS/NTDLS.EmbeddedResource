@@ -8,18 +8,18 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Copyright>Copyright © 2026 NetworkDLS</Copyright>
-    <Description>Simple utility to read and manage embedded resources (text files, images, etc.) in .NET applications.</Description>
+    <Description>Simple utility to read and enumerate embedded resources (text files, images, etc.) in .NET applications.</Description>
     <PackageProjectUrl>https://github.com/NTDLS/NTDLS.EmbeddedResource</PackageProjectUrl>
     <RepositoryUrl>https://github.com/NTDLS/NTDLS.EmbeddedResource</RepositoryUrl>
     <PackageTags>embedded-resource;resource-management;caching</PackageTags>
     <PackageReleaseNotes>
-		Automatic removal of BOM (Byte Order Mark) from UTF-8 encoded text files when reading embedded resources.
+		Added enumerate support for embedded resources.
 	</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>NetworkDLS</Authors>
     <Company>NetworkDLS</Company>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
