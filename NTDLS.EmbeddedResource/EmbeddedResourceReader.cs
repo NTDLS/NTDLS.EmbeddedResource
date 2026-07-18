@@ -11,7 +11,6 @@ namespace NTDLS.EmbeddedResource
     public static class EmbeddedResourceReader
     {
         private static readonly MemoryCache _cache = new(new MemoryCacheOptions());
-        private static readonly string _bom = "\uFEFF";
 
         /// <summary>
         /// Strips the Byte Order Mark (BOM) from the beginning of a string if it exists.
