@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0;net10.0;</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>NTDLS.EmbeddedResource</Title>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
